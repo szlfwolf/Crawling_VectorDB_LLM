@@ -7,8 +7,6 @@ import tcvectordb
 from tcvectordb.model.document import Document, Filter, SearchParams
 
 
-
-
 MODEL_PATH = os.environ.get('MODEL_PATH', 'THUDM/chatglm3-6b')
 TOKENIZER_PATH = os.environ.get("TOKENIZER_PATH", MODEL_PATH)
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -20,9 +18,11 @@ st.set_page_config(
 )
 
 def searchTvdb(txt):
+    dburl=getenv("TencentVDB_URL")
+    dbkey=getenv("TencentVDB_KEY")
     conn_params = {
-        'url':'http://lb-p7oj0itn-j5gawvui3dz4lcn2.clb.ap-beijing.tencentclb.com:50000',
-        'key':'lgrdYzlMsmc1GhVtcmilXhZevJBfFlId919EOvaE',
+        'url':dburl,
+        'key':dbkey,
         'username':'root',
         'timeout':20
         }
@@ -59,7 +59,7 @@ def get_model():
         model = AutoModel.from_pretrained(MODEL_PATH, trust_remote_code=True).float().to(DEVICE).eval()
     # 多显卡支持,使用下面两行代替上面一行,将num_gpus改为你实际的显卡数量
     # from utils import load_model_on_gpus
-    # model = load_model_on_gpus("THUDM/chatglm3-6b", num_gpus=2)
+    # model = load_model_on_gpus(MODEL_PATH, num_gpus=2)
     return tokenizer, model
 
 # 加载Chatglm3的model和tokenizer

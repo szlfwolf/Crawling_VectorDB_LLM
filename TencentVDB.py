@@ -5,8 +5,9 @@ from tcvectordb.model.collection import Embedding
 from tcvectordb.model.document import Document, Filter, SearchParams
 from tcvectordb.model.enum import FieldType, IndexType, MetricType, EmbeddingModel, ReadConsistency
 from tcvectordb.model.index import Index, VectorIndex, FilterIndex, HNSWParams, IVFFLATParams
+from os import getenv
 
-tcvectordb.debug.DebugEnable = False
+tcvectordb.debug.DebugEnable = True
 dbName='crawlingdb'
 collectionName='tencent_knowledge'
 class TencentVDB:
@@ -100,9 +101,11 @@ class TencentVDB:
 
 
 if __name__ == '__main__':
-    test_vdb = TencentVDB('http://lb-p7oj0itn-j5gawvui3dz4lcn2.clb.ap-beijing.tencentclb.com:50000', key='lgrdYzlMsmc1GhVtcmilXhZevJBfFlId919EOvaE', username='root')
-    test_vdb.clear()
-    test_vdb.delete_and_drop()
+    dburl=getenv("TencentVDB_URL")
+    dbkey=getenv("TencentVDB_KEY")
+    test_vdb = TencentVDB(dburl, key=dbkey, username='root')
+    # test_vdb.clear()
+    # test_vdb.delete_and_drop()
     test_vdb.create_db_and_collection()
     test_vdb.upsert_data()
 
